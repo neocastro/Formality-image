@@ -3,12 +3,22 @@ var Formality_aux = require("./Parse_Formality.js");
 var fs = require("fs");
 
 function parse_dir(dirname){
-  fs.readdir(dirname, function(err, filenames) {
+  fs.readdir(dirname, async function(err, filenames) {
     if (err) {
       console.log(err);
       return;
     }
-    filenames.forEach( image_name => parse_single_image(dirname, image_name));
+    // filenames.forEach( image_name => parse_single_image(dirname, image_name));
+    var content =  "" 
+    for(var i=0; i < filenames.length; i++){
+      var filename = filenames[i]
+      var img_info = await Image.read_image(dirname + filename)
+      var fm_code  = Formality_aux.file_content(filename, img_info)
+      content += "\n" + fm_code
+    }
+    var folder_name = dirname.split("/")[2]
+    fs.writeFileSync("./fm_images/"+folder_name+"/"+"Mons.Assets.fm", content)    
+    
   })
 }
 
@@ -26,7 +36,7 @@ function parse_single_image(dirname, image_name){
 } //"index.js: got an error of MIME for Buffer from Jimp"
 
 // Runs the script in a folder
-parse_dir("./img/mons/");
+parse_dir("./img/Mons/");
 
 // Runs the script for a single file
 // parse_single_image("./img/construction/", "tent_01_z4p.png");

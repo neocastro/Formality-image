@@ -114,4 +114,4 @@ function make_fm_file(dirname, image_info, image_name){
   return save_fm_file(folder_name, only_name, content);
 }
 
-module.exports = { make_fm_file };
+module.exports = { make_fm_file, file_content };
